@@ -1,0 +1,36 @@
+---
+ - name: creating jinja template
+   hosts: test
+   tasks: 
+     - name: fetch data to control
+       fetch:
+         src: /var/log/wtmp
+         dest: ~/data/backup
+
+     - name: copy data to managed
+       copy:
+         src: /etc/fstab
+         dest: /user.txt
+         owner: root
+         group: root
+         mode: '0644'
+         setype: samba_share_t
+
+     - name: use of line in module
+       lineinfile:
+         path: /user.txt
+         line: we add the one line
+
+     - name: use of block in line module
+       blockinfile:
+         path: /user.txt
+         block: |
+           ansible is an open-source software
+           configuration management and application
+           tool enabling infrastructure as a code
+
+     - name: remove a file
+       file: 
+         path: /user.txt
+         state: absent
+         
