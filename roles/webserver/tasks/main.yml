@@ -1,0 +1,28 @@
+---
+# tasks file for webserver
+ - name: install httpd 
+   yum: 
+     name: "{{ item }}"
+     state: present
+   loop:
+     - httpd
+     - firewalld    
+ - name: start service
+   service:
+     name: "{{ item }}"
+     state: started
+     enabled: yes
+   loop:
+     - httpd
+     - firewalld
+ - name: start firewalld
+   firewalld:
+      service: https
+      permanent: true
+      state: enabled
+      immediate: true
+ - name: create index.html file
+   template: 
+      src: index.html.j2
+      dest: /var/www/html/index.html
+      
